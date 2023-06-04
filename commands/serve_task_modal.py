@@ -1,4 +1,18 @@
-helper_script_1_model = {
+Init_Modal = {
+	"type": "modal",
+	"callback_id": "serve-task-view-id",
+	"title": {
+		"type": "plain_text",
+		"text": "Serve Generic Task",
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+	},
 	"blocks": [
 		{
 			"type": "section",
@@ -20,7 +34,7 @@ helper_script_1_model = {
 				"type": "static_select",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item",
+					"text": "Choose Environment",
 					"emoji": False
 				},
 				"options": [
@@ -40,15 +54,13 @@ helper_script_1_model = {
 						},
 						"value": "stage"
 					}
-				],
-				"action_id": "environment-action"
+				]
 			}
 		},
 		{
 			"type": "input",
 			"element": {
-				"type": "plain_text_input",
-				"action_id": "item-id-action"
+				"type": "plain_text_input"
 			},
 			"label": {
 				"type": "plain_text",
@@ -59,29 +71,13 @@ helper_script_1_model = {
 		{
 			"type": "input",
 			"element": {
-				"type": "plain_text_input",
-				"action_id": "item-amount-action"
+				"type": "plain_text_input"
 			},
 			"label": {
 				"type": "plain_text",
 				"text": "Amount",
 				"emoji": False
 			}
-		},
-		{
-			"type": "actions",
-			"elements": [
-				{
-					"type": "button",
-					"text": {
-						"type": "plain_text",
-						"text": "Go!",
-						"emoji": False
-					},
-					"value": "submit",
-					"action_id": "click-accept"
-				}
-			]
 		}
 	]
 }
