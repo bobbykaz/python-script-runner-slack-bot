@@ -9,5 +9,8 @@ Set up:
 5. Commands - add `/slack/events` route for ALL slash commands
 6. Interactivity - add `/slack/events` route to both the UI interactivity AND the External UI options on this page.
 
+Run:
+`flask --app app run -p 80`
+
 Examples:
 https://github.com/slackapi/bolt-python/tree/main/examples
