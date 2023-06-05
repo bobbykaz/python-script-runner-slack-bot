@@ -1,7 +1,7 @@
 import os
 import logging
 from slack_bolt import App
-from commands.cmd_serve_task import Register_serve_task_command 
+from commands.serve_task.cmd import Register_serve_task_command 
 
 logging.basicConfig(level=logging.DEBUG)
 # Initializes your app with your bot token and signing secret
