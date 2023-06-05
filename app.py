@@ -1,5 +1,7 @@
 import logging
-
+from queue import Queue, Empty
+from threading import Thread
+from time import sleep
 from slack_bolt import App
 from commands.serve_task.cmd import Register_serve_task_command 
 
@@ -17,7 +19,9 @@ def hello(body, ack):
     user_id = body["user_id"]
     ack(f"Hi <@{user_id}>!")
 
-Register_serve_task_command(app, "st")
+commands = Queue()
+
+Register_serve_task_command(app, commands, "st")
 
 from flask import Flask, request
 from slack_bolt.adapter.flask import SlackRequestHandler
@@ -25,6 +29,17 @@ from slack_bolt.adapter.flask import SlackRequestHandler
 flask_app = Flask(__name__)
 handler = SlackRequestHandler(app)
 
+def bg_work_loop():
+    while True:
+        try:
+            command = commands.get_nowait()
+            print(command)
+            app.client.chat_postMessage(channel="bots",text=f"```{command}```")
+        except Empty:
+            pass
+        sleep(5)  # TODO poll other things
+
+Thread(target=bg_work_loop, daemon=True).start()
 
 @flask_app.route("/slack/events", methods=["POST"])
 def slack_events():

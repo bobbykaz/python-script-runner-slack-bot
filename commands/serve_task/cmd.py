@@ -3,7 +3,7 @@ import pprint
 from slack_bolt import App
 import commands.serve_task.modal
 
-def Register_serve_task_command(app, id_prefix):
+def Register_serve_task_command(app, work_queue, id_prefix):
     modal = commands.serve_task.modal.ServeTaskModal(id_prefix)
     @app.command("/serve-task")
     def handle_command(body, ack, respond, client, logger):
@@ -29,5 +29,6 @@ def Register_serve_task_command(app, id_prefix):
         res_id = response_values['item_id_block'][modal.item_id]['value']
         res_amt = response_values['item_amt_block'][modal.item_amt_id]['value']
         logger.info(f"{res_env} {res_id} {res_amt}")
+        work_queue.put_nowait({ 'command':'serve-task', 'args': [res_env,res_id,res_amt] })
     
 

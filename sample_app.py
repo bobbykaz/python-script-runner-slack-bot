@@ -172,7 +172,7 @@ def button_click(ack, body, respond):
         text=":white_check_mark: Done!",
     )
 
-Register_serve_task_command(app, "st")
+Register_serve_task_command(app, {}, "st")
 
 # Start your app
 if __name__ == "__main__":
