@@ -1,5 +1,4 @@
-from jobs.processor import process_job
-from jobs.job import Job
+from jobs.processor import process_job, Job
 import sys
 
 if __name__ == "__main__":
