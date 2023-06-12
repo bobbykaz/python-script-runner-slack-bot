@@ -1,26 +1,35 @@
 import uuid
-from jobs.tee import FileTee
+import jobs.tee
 import jobs.jira_reporter.script
 import jobs.jira_reporter.badscript
 import os
+import enum
 import traceback
 
+class JobReportType(enum.Enum):
+    AtTheEnd = 1
+    Live = 2
+    NoReport = 3
+
 class Job(object):
-    def __init__(self, user, name, args):
+    def __init__(self, user, name, args, notifyStart=False, reportType=JobReportType.AtTheEnd, tsId=None):
         self.user = user
         self.name = name
         self.args = args
+        self.id = uuid.uuid4()
+        self.notifyStart = notifyStart
+        self.reportType = reportType
+        self.tsId = tsId
     def __str__(self):
-        return f"{self.user} - {self.name} - {self.args}"
+        return f"{self.user}-{self.name}-{self.args}-{self.notifyStart}-{self.reportType}-{self.tsId}"
      
 
 def process_job(job: Job, slack_app=None):
-    jobid = uuid.uuid4()
-    print(f"{jobid} - {job}")
+    print(f"{job}")
     args = [job.name] + job.args
-    filename = f"{job.name}-{jobid}.log"
+    filename = f"{job.name}-{job.id}.log"
 
-    with FileTee(filename, 'w'):
+    with jobs.tee.FileTee(filename, 'w'):
         try:
             run_job_internal(job.name, args)
             print(f"@{job.user}: Your job has been completed.")
@@ -46,4 +55,13 @@ def run_job_internal(job_name, args):
             jobs.jira_reporter.badscript.main(args)
         case _:
             print(f"No job '{job_name}' found")
-    
+
+def teeUp(job: Job, app):
+    match job.reportType:
+        case JobReportType.AtTheEnd:
+            filename = f"{job.name}-{job.id}.log"
+            return jobs.tee.FileTee(filename, 'w')
+        case JobReportType.Live:
+            return jobs.tee.LiveSlackTee()
+        case _:
+            return jobs.tee.EmpTee()

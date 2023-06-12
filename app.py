@@ -33,8 +33,9 @@ def bg_work_loop():
     while True:
         try:
             command = commands.get_nowait()
+            msg = app.client.chat_postMessage(channel="bots",text=f"Starting:\n```{command}```")
             print(command)
-            app.client.chat_postMessage(channel="bots",text=f"```{command}```")
+            app.client.chat_postMessage(channel="bots",text=f"Finished:\n```{command}```")
         except Empty:
             pass
         sleep(5)  # TODO poll other things
