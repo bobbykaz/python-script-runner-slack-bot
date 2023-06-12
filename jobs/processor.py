@@ -1,5 +1,5 @@
 import uuid
-from jobs.tee import Tee
+from jobs.tee import FileTee
 import jobs.jira_reporter.script
 import jobs.jira_reporter.badscript
 import os
@@ -14,13 +14,13 @@ class Job(object):
         return f"{self.user} - {self.name} - {self.args}"
      
 
-def process_job(job: Job):
+def process_job(job: Job, slack_app=None):
     jobid = uuid.uuid4()
     print(f"{jobid} - {job}")
     args = [job.name] + job.args
     filename = f"{job.name}-{jobid}.log"
 
-    with Tee(filename, 'w'):
+    with FileTee(filename, 'w'):
         try:
             run_job_internal(job.name, args)
             print(f"@{job.user}: Your job has been completed.")
