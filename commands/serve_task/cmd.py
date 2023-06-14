@@ -5,6 +5,7 @@ import commands.serve_task.modal
 
 def Register_serve_task_command(app, work_queue, id_prefix):
     modal = commands.serve_task.modal.ServeTaskModal(id_prefix)
+    
     @app.command("/serve-task")
     def handle_command(body, ack, respond, client, logger):
         logger.info(body)

@@ -7,6 +7,8 @@ health_file = "healthcheck.txt"
 
 def health_update():
     Path(health_file).touch()
+    #health_time = os.path.getmtime(health_file)
+    #print(f'Health Update: {health_time}')
 
 
 def health_check():
