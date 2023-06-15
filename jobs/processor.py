@@ -21,7 +21,12 @@ class Job(object):
         self.reportType = reportType
         self.tsId = tsId
     def __str__(self):
-        return f"{self.user}-{self.name}-{self.args}-{self.notifyStart}-{self.reportType}-{self.tsId}"
+        return f"{self.id}-{self.user}-{self.name}-{self.args}-{self.notifyStart}-{self.reportType}-{self.tsId}"
+    
+class JobResult(object):
+    def __init__(self, data, success):
+        self.data = data
+        self.success = success
      
 
 def process_job(job: Job, slack_app=None):
@@ -29,13 +34,14 @@ def process_job(job: Job, slack_app=None):
     args = [job.name] + job.args
     filename = f"{job.name}-{job.id}.log"
 
+    ok = True
     with jobs.tee.FileTee(filename, 'w'):
         try:
             run_job_internal(job.name, args)
-            print(f"@{job.user}: Your job has been completed.")
         except Exception as e:
-            print(f"@{job.user}: Sorry, I ran into an error while running your job\n Job Details: [{job}]")
+            print(f"Error while running job [{job}]")
             print(traceback.format_exc())
+            ok = False
         finally:
             pass
     
@@ -44,7 +50,7 @@ def process_job(job: Job, slack_app=None):
         data = file.read()
         
     os.remove(filename)
-    return data
+    return JobResult(data, ok)
     
 
 def run_job_internal(job_name, args):
@@ -62,6 +68,6 @@ def teeUp(job: Job, app):
             filename = f"{job.name}-{job.id}.log"
             return jobs.tee.FileTee(filename, 'w')
         case JobReportType.Live:
-            return jobs.tee.LiveSlackTee()
+            return jobs.tee.EmpTee()#jobs.tee.LiveSlackTee()
         case _:
             return jobs.tee.EmpTee()

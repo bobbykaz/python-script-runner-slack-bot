@@ -11,7 +11,7 @@ Features:
 
 Setting up the slack app:
 1. new app in slack
-2. In the Oauth Permissions Section, add `chat:write` scope, save token
+2. In the Oauth Permissions Section, add `chat:write` and `chat:write.customize` scopes, save token
 3. Basic info, save signing secret
 4. Notifications - add `/slack/events` route, let the app verify
 5. Commands - add `/slack/events` route for ALL slash commands

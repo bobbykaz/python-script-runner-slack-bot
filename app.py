@@ -6,7 +6,7 @@ from commands.serve_task.cmd import Register_serve_task_command
 from health import health_check
 import command_queue
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 #creds loaded from env var
 app = App()
 
@@ -22,7 +22,7 @@ def hello(body, ack):
 
 commands = Queue()
 Register_serve_task_command(app, commands, "st")
-Thread(target=command_queue.get_bg_work_loop(commands, app), daemon=True).start()
+Thread(target=command_queue.get_bg_work_loop(commands, app, "bots"), daemon=True).start()
 
 from flask import Flask, request
 from slack_bolt.adapter.flask import SlackRequestHandler
