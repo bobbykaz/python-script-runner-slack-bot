@@ -26,7 +26,8 @@ Register_example_command(app, work_queue)
 
 # Bootleg backround thread to process long-running work... or you can set up a proper external message queue...
 import work_queue_loop
-Thread(target=work_queue_loop.get_bg_work_loop(work_queue, app, "bots"), daemon=True).start()
+from config import BOT_LOG_CHANNEL
+Thread(target=work_queue_loop.get_bg_work_loop(work_queue, app, BOT_LOG_CHANNEL), daemon=True).start()
 
 from flask import Flask, request
 from slack_bolt.adapter.flask import SlackRequestHandler
