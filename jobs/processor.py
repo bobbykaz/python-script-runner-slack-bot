@@ -1,7 +1,5 @@
 import uuid
 import jobs.tee
-import jobs.jira_reporter.script
-import jobs.jira_reporter.badscript
 import os
 import enum
 import traceback
@@ -52,13 +50,17 @@ def process_job(job: Job, slack_app=None):
     os.remove(filename)
     return JobResult(data, ok)
     
-
+import scripts.script
+import scripts.badscript
+import scripts.print_over_time
 def run_job_internal(job_name, args):
     match job_name:
-        case "jira":
-            jobs.jira_reporter.script.main(args)
+        case "good_test":
+            scripts.script.main(args)
         case "fail_test":
-            jobs.jira_reporter.badscript.main(args)
+            scripts.badscript.main(args)
+        case "slow_test":
+            scripts.print_over_time.main(args)
         case _:
             print(f"No job '{job_name}' found")
 

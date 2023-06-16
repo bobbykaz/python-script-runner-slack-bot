@@ -2,10 +2,10 @@
 import sys
 
 def search_issues(ticket, lable):
-    raise Exception(f'Sample Exception {ticket}/{lable}')
+    print(f"ticket: {ticket} - label: {lable}")
 
 def main(args):
-    print("sample thing as if this were a real script")
+    print("pretending to search for tickets in your ticket system...")
     search_issues("ab-123", "done")
     search_issues(args[0], args[1])
 

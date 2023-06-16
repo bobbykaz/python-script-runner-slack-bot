@@ -3,6 +3,7 @@ from health import health_update
 from time import sleep
 from queue import Empty
 from jobs.processor import Job,JobResult, process_job
+from config import WORK_QUEUE_POLL_INTERVAL_SECONDS
 import traceback
 
 def get_bg_work_loop(commands, slack_app, targetChannel):
@@ -44,6 +45,7 @@ def get_bg_work_loop(commands, slack_app, targetChannel):
                 pass
             except Exception:
                 logging.error("uh oh!")
-            sleep(5)
+
+            sleep(WORK_QUEUE_POLL_INTERVAL_SECONDS)
     
     return bg_work_loop
